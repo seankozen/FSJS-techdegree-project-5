@@ -4,7 +4,7 @@ const urlAPI = `https://randomuser.me/api/?results=12&inc=name, picture, email, 
 const galleryContainer = document.getElementById('gallery');    // Get gallery
 const searchBox = document.querySelector('.search-container');  // Get search container
 const bodyHtml = document.querySelector('body');                // Get body of HTML
-let currentModalIndex;
+let currentModalIndex;                                          // Index for current employee to be displayed in modal
 
 /****************************************************/
 /*************** Fetch Employee Data ****************/
@@ -58,7 +58,7 @@ let searchField = `
     </form>`;
 
 // Display search field on screen    
-searchBox.insertAdjacentHTML('beforeend', searchField);
+searchBox.insertAdjacentHTML('beforeend', searchField);         
 
 /****************************************************/
 /***************** Employee Search ******************/

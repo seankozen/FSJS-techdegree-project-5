@@ -5,6 +5,8 @@ const galleryContainer = document.getElementById('gallery');    // Get gallery
 const searchBox = document.querySelector('.search-container');  // Get search container
 const bodyHtml = document.querySelector('body');                // Get body of HTML
 let currentModalIndex;                                          // Index for current employee to be displayed in modal
+let found = true;                                               // Boolean for search function
+
 
 /****************************************************/
 /*************** Fetch Employee Data ****************/
@@ -26,11 +28,11 @@ function displayEmployees(employeeData) {
 
     //Loop through each employee to create HTML
     employeeData.forEach((employee, index) => {
-        let name = employee.name;
-        let email = employee.email;
-        let city = employee.location.city;
-        let state = employee.location.state;
-        let picture = employee.picture;
+        const name = employee.name;
+        const email = employee.email;
+        const city = employee.location.city;
+        const state = employee.location.state;
+        const picture = employee.picture;
 
         employeeHTML += `
         <div class="card" data-index="${index}">
@@ -52,7 +54,7 @@ function displayEmployees(employeeData) {
 /****************************************************/
 /***************** Append Search Box  ***************/
 /****************************************************/
-let searchField = `
+const searchField = `
     <form action="#" method="get">
         <input type="search" id="search-input" class="search-input" placeholder="Search..."> 
     </form>`;
@@ -68,17 +70,31 @@ searchBoxInput.addEventListener('keyup', employeeSearch);          // Keyup even
 
 function employeeSearch() {
     
-    let input = searchBoxInput.value.toLowerCase();   //Gets input and continuously saves to "input"
+    const input = searchBoxInput.value.toLowerCase();   //Gets input and continuously saves to "input"
     const empCards = document.getElementsByClassName('card');       //Gets employee cards
     const empNames = document.getElementsByClassName('card-name');  //Gets eemployee names
+    let employeesDisplayed = 0;    // Tracks number of employees found
+
+    // If employee found, removes "Not found message"
+    if(found === false){
+        const noResultsFound = document.getElementById("no-results");   // Gets no results message
+        noResultsFound.remove();                                        
+    };
 
     // Loop for searching names
     for (let i= 0; i < employees.length; i++) {
         if (empNames[i].textContent.toLowerCase().includes(input)) {
             empCards[i].style.display = '';
+            employeesDisplayed++;
+            found = true;
         } else {
             empCards[i].style.display = 'none';
         }    
+    }
+    // Not found message display
+    if(employeesDisplayed == 0) {
+        galleryContainer.insertAdjacentHTML('beforeend', "<h1 id = 'no-results'>Sorry, no students found!</h1>");
+        found = false;
     }
 }
 
@@ -87,9 +103,9 @@ function employeeSearch() {
 /****************************************************/
 function displayModal(index) {
 
-    let {name, dob, phone, email, location :{city, street, state, postcode}, picture} = employees[index];
-    let newFormatPhone = phone.replace(/-/,' ');  // Format phone number
-    let birthday = formatDateOfBirth(dob);        // Format date of birth
+    const {name, dob, phone, email, location :{city, street, state, postcode}, picture} = employees[index];
+    const newFormatPhone = phone.replace(/-/,' ');  // Format phone number
+    const birthday = formatDateOfBirth(dob);        // Format date of birth
     
     const modalHTML = `
         <div class="modal-container">
@@ -150,9 +166,9 @@ function displayModal(index) {
 /****************************************************/
 function formatDateOfBirth(dateOfBirth) {
     
-    let year = dateOfBirth.date.slice(0,4);
-    let month = dateOfBirth.date.slice(5,7);
-    let day = dateOfBirth.date.slice(8,10);
+    const year = dateOfBirth.date.slice(0,4);
+    const month = dateOfBirth.date.slice(5,7);
+    const day = dateOfBirth.date.slice(8,10);
     return `${month}/${day}/${year}`;
 }
 
@@ -161,8 +177,8 @@ function formatDateOfBirth(dateOfBirth) {
 /****************************************************/
 galleryContainer.addEventListener('click', e => {
      
-        let card = e.target.closest('.card');
-        let index = card.getAttribute('data-index');
+        const card = e.target.closest('.card');
+        const index = card.getAttribute('data-index');
         currentModalIndex = index;
         displayModal(currentModalIndex);
 });
